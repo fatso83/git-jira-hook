@@ -39,8 +39,7 @@ myname = os.path.basename(sys.argv[0])
 
 # Change this value to "CRITICAL/ERROR/WARNING/INFO/DEBUG/NOTSET" 
 # as appropriate. 
-# loglevel=logging.INFO
-# loglevel=logging.DEBUG
+loglevel=logging.WARNING
 
 
 import contextlib
