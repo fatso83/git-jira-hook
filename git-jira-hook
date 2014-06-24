@@ -467,16 +467,21 @@ def get_jira_url():
     return jira_url
 
 def get_github_url():
-    giturl = git_config_get("remote.origin.url")
+    commit_url = ""
+    remote_url = git_config_get("remote.origin.url")
+    git_prefix = re.match("git@(.*):(.*)", remote_url)
+    http_prefix = re.match("(http?.*)\.git$", remote_url)
 
     # match for git@....
-    m=re.match("git@(.*):(.*)", giturl)
-    url = "https://" + m.group(1) + "/" + m.group(2) + "/commit"
+    if git_prefix :
+        commit_url = "https://" + git_prefix.group(1) + "/"  \
+                     + git_prefix.group(2) + "/commit"
+    elif http_prefix:
+        commit_url = http_prefix.group(1) + "/commit"
+    else:
+        print "Unknown remote url detected!: " + remote_url
 
-    # match for https://...github.com/...
-    # not imp;lemented
-
-    return url
+    return commit_url
 
 def get_jira_cached_auth(jira_url):
     return get_cfg_value(os.environ['HOME'] + "/.jirarc", jira_url, "auth")
